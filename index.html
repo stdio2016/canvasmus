@@ -13,12 +13,17 @@ canvas{
   width: 100vw;
   display: block;
 }
+#toolbar{
+  position: absolute;
+}
 </style>
 <body onresize='resize()'>
+  <div id='toolbar'>移動模式 選取模式 刪除模式 好多模式 超多模式 多到爆掉模式</div>
 <canvas id='canvas'>
 你的瀏覽器不支援canvas QQ
 </canvas>
 <script>
+function xxx(){
 var changed=false;
 var canvas=document.getElementById('canvas');
 var ctx=canvas.getContext('2d');
@@ -283,7 +288,9 @@ function moveViewpoint(){
 	if(viewpoint.y>canvas.height-50) viewpoint.y=canvas.height-50;
 	if(viewpoint.y<0) viewpoint.y=0;
 }
-</script>
-
+}</script>
+<script src='js/View.js'></script>
+<script src='js/Control.js'></script>
+<script src='js/Gesture.js'></script>
 </body>
 </html>
