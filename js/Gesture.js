@@ -102,6 +102,7 @@ function onWheel(e){
 }
 
 function touchStart(e){
+  e.preventDefault();
   var changed = e.changedTouches;
   for(var i = 0; i < changed.length; i++){
     var t = changed[i];
@@ -112,14 +113,14 @@ function touchStart(e){
         viewer.down(touch1);
         break;
       case TouchState.touch1:
-        e.preventDefault();
         touchState = TouchState.touch2;
         touch2.down(t.clientX, t.clientY, t.identifier);
         viewer.down2(touch1, touch2);
+        break;
       case TouchState.touch2:
-        e.preventDefault();
         touchState = TouchState.touch3More;
         viewer.cancel2(touch1, touch2);
+        break;
       default:
         break;
     }
@@ -127,12 +128,13 @@ function touchStart(e){
 }
 
 function touchMove(e){
+  e.preventDefault();
   if(touchState == TouchState.touch1 && e.touches.length == 1){
     var t1 = e.touches[0];
     touch1.move(t1.clientX, t1.clientY);
     viewer.drag(touch1);
   }
-  else if(touchState == TouchState.touch1 && e.touches.length == 1){
+  else if(touchState == TouchState.touch2 && e.touches.length == 2){
     var t1 = e.touches[0];
     var t2 = e.touches[1];
     if(t1.identifier == touch1.id){
@@ -148,6 +150,7 @@ function touchMove(e){
 }
 
 function touchEnd(e){
+  e.preventDefault();
   var changed = e.changedTouches;
   switch (touchState) {
     case TouchState.touch1:

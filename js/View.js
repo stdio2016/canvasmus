@@ -30,17 +30,17 @@ function draw(){
     ctx.stroke();
   }
   if(line2.length >= 2){
-  ctx.fillStyle = 'red';
-  ctx.beginPath();
-  ctx.arc(line[0], line[1], 10, 0, 2 * Math.PI);
-  ctx.fill();
-  ctx.strokeStyle = 'black';
-  ctx.beginPath();
-  ctx.moveTo(line[0], line[1]);
-  for(var i=2; i<line2.length; i+=2){
-  ctx.lineTo(line2[i], line2[i+1]);
-  }
-  ctx.stroke();
+    ctx.fillStyle = 'blue';
+    ctx.beginPath();
+    ctx.arc(line2[0], line2[1], 10, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.strokeStyle = 'black';
+    ctx.beginPath();
+    ctx.moveTo(line2[0], line2[1]);
+    for(var i=2; i<line2.length; i+=2){
+      ctx.lineTo(line2[i], line2[i+1]);
+    }
+    ctx.stroke();
   }
   if(cancelled){
     ctx.fillStyle = 'gray';
@@ -72,7 +72,7 @@ viewer.down = function(touch){
   velo = [0, 0];
   line = [touch.x, touch.y];
   draw();
-  console.log('down');
+//  console.log('down');
 };
 
 viewer.move = function(touch){
@@ -91,7 +91,7 @@ viewer.drag = function(touch){
 
 viewer.up = function(touch){
   velo = [touch.vx, touch.vy];
-  console.log('up');
+//  console.log('up');
   draw();
 };
 
@@ -99,19 +99,19 @@ viewer.cancel = function(touch){
   velo = [touch.vx, touch.vy];
   cancelled = true;
   draw();
-  console.log('cancelled');
+//  console.log('cancelled');
 };
 
 viewer.scroll = function(sx, sy){
   velo = [sx, sy];
   draw();
-  console.log('scroll');
+//  console.log('scroll');
 };
 
 viewer.exit = function(touch){
   cancelled = true;
   draw();
-  console.log('exit');
+//  console.log('exit');
 };
 
 viewer.down2 = function(touch1, touch2){
