@@ -42,38 +42,38 @@ var touch1 = new MyTouch();
 var touch2 = new MyTouch();
 
 function mouseDown(e){
-	e.preventDefault();
-	if(e.button == 0){
+  e.preventDefault();
+  if(e.button == 0){
     if(touchState < TouchState.touch1){
       touchState = TouchState.mouseDown;
       touch1.down(e.clientX, e.clientY, 'mouse');
       viewer.down(touch1);
     }
-	}
+  }
 }
 
 function mouseMove(e){
-	e.preventDefault();
+  e.preventDefault();
   touch1.move(e.clientX, e.clientY);
-	if(e.buttons & 1){
+  if(e.buttons & 1){
     if(touchState == TouchState.mouseDown){
       touchState = TouchState.mouseDown;
       viewer.drag(touch1);
     }
-	}
+  }
   else{
     viewer.move(touch1);
   }
 }
 
 function mouseUp(e){
-	e.preventDefault();
-	if(e.button==0){
+  e.preventDefault();
+  if(e.button==0){
     if(touchState == TouchState.mouseDown){
       viewer.up(touch1);
     }
     touchState = TouchState.none;
-	}
+  }
 }
 
 function mouseLeave(e){
