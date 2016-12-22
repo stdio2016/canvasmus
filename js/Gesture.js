@@ -32,8 +32,8 @@ MyTouch.prototype.down = function(x, y, id){
 MyTouch.prototype.move = function(x, y){
   this.dx = x - this.x;
   this.dy = y - this.y;
-  this.vx = this.vx * 0.8 + this.dx;
-  this.vy = this.vy * 0.8 + this.dy;
+  this.vx = this.vx * 0.8 + this.dx * 0.2;
+  this.vy = this.vy * 0.8 + this.dy * 0.2;
   this.x = x;
   this.y = y;
 };
