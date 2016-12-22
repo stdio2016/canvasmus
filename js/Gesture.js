@@ -47,7 +47,7 @@ function mouseDown(e){
     if(touchState < TouchState.touch1){
       touchState = TouchState.mouseDown;
       touch1.down(e.clientX, e.clientY, 'mouse');
-      viewer.down(touch1);
+      control.down(touch1);
     }
   }
 }
@@ -58,11 +58,11 @@ function mouseMove(e){
   if(e.buttons & 1){
     if(touchState == TouchState.mouseDown){
       touchState = TouchState.mouseDown;
-      viewer.drag(touch1);
+      control.drag(touch1);
     }
   }
   else{
-    viewer.move(touch1);
+    control.move(touch1);
   }
 }
 
@@ -70,7 +70,7 @@ function mouseUp(e){
   e.preventDefault();
   if(e.button==0){
     if(touchState == TouchState.mouseDown){
-      viewer.up(touch1);
+      control.up(touch1);
     }
     touchState = TouchState.none;
   }
@@ -78,10 +78,10 @@ function mouseUp(e){
 
 function mouseLeave(e){
   if(touchState == TouchState.none){
-    viewer.exit(touch1);
+    control.exit(touch1);
   }
   else{
-    viewer.cancel(touch1);
+    control.cancel(touch1);
   }
   touchState = TouchState.mouseLeave;
 }
@@ -96,7 +96,7 @@ function onWheel(e){
       // Does nothing
     }
     else{
-      viewer.scroll(e.deltaX, e.deltaY);
+      control.scroll(e.deltaX, e.deltaY);
     }
   }
 }
@@ -110,16 +110,16 @@ function touchStart(e){
       case TouchState.none:
         touchState = TouchState.touch1;
         touch1.down(t.clientX, t.clientY, t.identifier);
-        viewer.down(touch1);
+        control.down(touch1);
         break;
       case TouchState.touch1:
         touchState = TouchState.touch2;
         touch2.down(t.clientX, t.clientY, t.identifier);
-        viewer.down2(touch1, touch2);
+        control.down2(touch1, touch2);
         break;
       case TouchState.touch2:
         touchState = TouchState.touch3More;
-        viewer.cancel2(touch1, touch2);
+        control.cancel2(touch1, touch2);
         break;
       default:
         break;
@@ -132,7 +132,7 @@ function touchMove(e){
   if(touchState == TouchState.touch1 && e.touches.length == 1){
     var t1 = e.touches[0];
     touch1.move(t1.clientX, t1.clientY);
-    viewer.drag(touch1);
+    control.drag(touch1);
   }
   else if(touchState == TouchState.touch2 && e.touches.length == 2){
     var t1 = e.touches[0];
@@ -145,7 +145,7 @@ function touchMove(e){
       touch2.move(t1.clientX, t1.clientY);
       touch1.move(t2.clientX, t2.clientY);
     }
-    viewer.drag2(touch1, touch2);
+    control.drag2(touch1, touch2);
   }
 }
 
@@ -154,11 +154,11 @@ function touchEnd(e){
   var changed = e.changedTouches;
   switch (touchState) {
     case TouchState.touch1:
-      viewer.up(touch1);
+      control.up(touch1);
       touchState = TouchState.none;
       break;
     case TouchState.touch2:
-      viewer.cancel2(touch1, touch2);
+      control.cancel2(touch1, touch2);
       if(e.touches.length == 0){
         touchState = TouchState.none;
       }
