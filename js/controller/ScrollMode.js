@@ -29,12 +29,18 @@ scrollMode.exit = function(touch){
   ;
 };
 
+scrollMode.fingerDistance = 0.0;
+scrollMode.beginZoom = 1.0;
+
 scrollMode.down2 = function(touch1, touch2){
   view.stopScroll();
+  this.fingerDistance = touch1.distanceTo(touch2);
+  this.beginZoom = view.getZoom();
 };
 
 scrollMode.drag2 = function(touch1, touch2){
-  view.scroll(-(touch1.dx + touch2.dx) / 2, -(touch1.dy + touch2.dy) / 2);
+  view.scrollZoom(-(touch1.dx + touch2.dx) / 2, -(touch1.dy + touch2.dy) / 2 ,
+    touch1.distanceTo(touch2) / this.fingerDistance * this.beginZoom);
 };
 
 scrollMode.up2 = function(touch1, touch2){
