@@ -1,2 +1,2 @@
 // for debug purpose
-var control = viewer;
+var control = scrollMode;
