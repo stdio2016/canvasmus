@@ -66,78 +66,52 @@ function makeChange(){
   }
 }
 
-viewer = {};
-viewer.down = function(touch){
-  cancelled = false;
-  velo = [0, 0];
-  line = [touch.x, touch.y];
-  draw();
-//  console.log('down');
+view = {};
+
+view.viewpoint = {
+  x: 0.0,
+  measure: 0,
+  y: 0.0,
+  part: 0,
+  scale: 1.0,
+  vx: 0.0,
+  vy: 0.0,
+  moving: false
 };
 
-viewer.move = function(touch){
-  draw();
-  ctx.fillStyle = 'yellow';
-  ctx.beginPath();
-  ctx.arc(touch.x, touch.y, 10, 0, 2 * Math.PI);
-  ctx.fill();
-};
-
-viewer.drag = function(touch){
-  line.push(touch.x);
-  line.push(touch.y);
-  draw();
-};
-
-viewer.up = function(touch){
-  velo = [touch.vx, touch.vy];
-//  console.log('up');
-  draw();
-};
-
-viewer.cancel = function(touch){
-  velo = [touch.vx, touch.vy];
-  cancelled = true;
-  draw();
-//  console.log('cancelled');
-};
-
-viewer.scroll = function(sx, sy){
-  velo = [sx, sy];
-  draw();
-//  console.log('scroll');
-};
-
-viewer.exit = function(touch){
-  cancelled = true;
-  draw();
-//  console.log('exit');
-};
-
-viewer.down2 = function(touch1, touch2){
-  velo = [0, 0];
-  line = [touch1.x, touch1.y];
-  line2 = [touch2.x, touch2.y];
+view.scroll = function(dx, dy, unscaled){
+  if (unscaled) {
+    this.viewpoint.x += dx;
+    this.viewpoint.y += dy;
+  }
+  else {
+    this.viewpoint.x += dx / this.viewpoint.scale;
+    this.viewpoint.y += dy / this.viewpoint.scale;
+  }
+  // TODO: update measure number
+  // TODO: update part number
   draw();
 };
 
-viewer.drag2 = function(touch1, touch2){
-  line.push(touch1.x);
-  line.push(touch1.y);
-  line2.push(touch2.x);
-  line2.push(touch2.y);
-  draw();
+view.zoom = function(newZoom, centerX, centerY){
+  if (newZoom > 3) {
+    newZoom = 3;
+  }
+  if (newZoom < 0.1) {
+    newZoom = 0.1;
+  }
+  var oldZoom = this.viewpoint.scale;
+  var deltaZoom = 1 - oldZoom / newZoom;
+  this.scroll(deltaZoom * centerX, deltaZoom * centerY, true);
+  this.viewpoint.scale = newZoom;
 };
 
-viewer.up2 = function(touch1, touch2){
-  velo = [touch1.vx + touch2.vx, touch1.vy + touch2.vy];
-  console.log('up');
-  draw();
+view.stopScroll = function(){
+  this.viewpoint.moving = false;
 };
 
-viewer.cancel2 = function(touch){
-  velo = [touch1.vx + touch2.vx, touch1.vy + touch2.vy];
-  cancelled = true;
-  draw();
-  console.log('cancelled');
+view.continueScroll = function(vx, vy){
+  this.viewpoint.moving = true;
+  this.viewpoint.vx = vx;
+  this.viewpoint.vy = vy;
 };
