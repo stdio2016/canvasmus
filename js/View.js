@@ -7,56 +7,20 @@ function resize(){
     draw();
 }
 canvas.addEventListener('resize', resize);
-var cancelled = false;
-var line = [];
-var line2 = [];
-var velo = [0, 0];
-resize();
 
 function draw(){
-  ctx.fillStyle='white';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  if(line.length >= 2){
-    ctx.fillStyle = 'red';
-    ctx.beginPath();
-    ctx.arc(line[0], line[1], 10, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.strokeStyle = 'black';
-    ctx.beginPath();
-    ctx.moveTo(line[0], line[1]);
-    for(var i=2; i<line.length; i+=2){
-      ctx.lineTo(line[i], line[i+1]);
-    }
-    ctx.stroke();
-  }
-  if(line2.length >= 2){
-    ctx.fillStyle = 'blue';
-    ctx.beginPath();
-    ctx.arc(line2[0], line2[1], 10, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.strokeStyle = 'black';
-    ctx.beginPath();
-    ctx.moveTo(line2[0], line2[1]);
-    for(var i=2; i<line2.length; i+=2){
-      ctx.lineTo(line2[i], line2[i+1]);
-    }
-    ctx.stroke();
-  }
-  if(cancelled){
-    ctx.fillStyle = 'gray';
-    ctx.beginPath();
-    ctx.arc(line[line.length-2], line[line.length-1], 10, 0, 2 * Math.PI);
-    ctx.fill();
-  }
-  if(velo[0] || velo[1]){
-    ctx.strokeStyle = 'green';
-    ctx.beginPath();
-    ctx.moveTo(line[line.length-2], line[line.length-1]);
-    ctx.lineTo(line[line.length-2] + velo[0],
-      line[line.length-1] + velo[1]);
-    ctx.stroke();
-  }
-  changed = false;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.save();
+  ctx.scale(viewpoint.scale, viewpoint.scale);
+  ctx.translate(-viewpoint.x, -viewpoint.y);
+  drawTest();
+  ctx.restore();
+}
+
+function drawTest(){
+  ctx.strokeRect(0, 0, 50, 30);
+  ctx.font = '20px DroidSans';
+  ctx.fillText("Test", 0, 20);
 }
 
 function makeChange(){
@@ -68,7 +32,7 @@ function makeChange(){
 
 view = {};
 
-view.viewpoint = {
+viewpoint = {
   x: 0.0,
   measure: 0,
   y: 0.0,
@@ -81,12 +45,12 @@ view.viewpoint = {
 
 view.scroll = function(dx, dy, unscaled){
   if (unscaled) {
-    this.viewpoint.x += dx;
-    this.viewpoint.y += dy;
+    viewpoint.x += dx;
+    viewpoint.y += dy;
   }
   else {
-    this.viewpoint.x += dx / this.viewpoint.scale;
-    this.viewpoint.y += dy / this.viewpoint.scale;
+    viewpoint.x += dx / viewpoint.scale;
+    viewpoint.y += dy / viewpoint.scale;
   }
   // TODO: update measure number
   // TODO: update part number
@@ -100,18 +64,18 @@ view.zoom = function(newZoom, centerX, centerY){
   if (newZoom < 0.1) {
     newZoom = 0.1;
   }
-  var oldZoom = this.viewpoint.scale;
+  var oldZoom = viewpoint.scale;
   var deltaZoom = 1 - oldZoom / newZoom;
   this.scroll(deltaZoom * centerX, deltaZoom * centerY, true);
-  this.viewpoint.scale = newZoom;
+  viewpoint.scale = newZoom;
 };
 
 view.stopScroll = function(){
-  this.viewpoint.moving = false;
+  viewpoint.moving = false;
 };
 
 view.continueScroll = function(vx, vy){
-  this.viewpoint.moving = true;
-  this.viewpoint.vx = vx;
-  this.viewpoint.vy = vy;
+  viewpoint.moving = true;
+  viewpoint.vx = vx;
+  viewpoint.vy = vy;
 };
