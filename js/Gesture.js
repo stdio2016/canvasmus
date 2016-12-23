@@ -38,6 +38,12 @@ MyTouch.prototype.move = function(x, y){
   this.y = y;
 };
 
+MyTouch.prototype.distanceTo = function(touch){
+  var dx = this.x - touch.x;
+  var dy = this.y - touch.y;
+  return Math.sqrt(dx * dx + dy * dy);
+};
+
 var touch1 = new MyTouch();
 var touch2 = new MyTouch();
 
@@ -81,7 +87,7 @@ function mouseLeave(e){
     control.exit(touch1);
   }
   else{
-    control.cancel(touch1);
+    control.cancel();
   }
   touchState = TouchState.mouseLeave;
 }
@@ -119,7 +125,7 @@ function touchStart(e){
         break;
       case TouchState.touch2:
         touchState = TouchState.touch3More;
-        control.cancel2(touch1, touch2);
+        control.cancel();
         break;
       default:
         break;
@@ -158,7 +164,7 @@ function touchEnd(e){
       touchState = TouchState.none;
       break;
     case TouchState.touch2:
-      control.cancel2(touch1, touch2);
+      control.cancel();
       if(e.touches.length == 0){
         touchState = TouchState.none;
       }
