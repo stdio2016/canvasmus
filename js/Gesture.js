@@ -100,11 +100,20 @@ function onWheel(e){
   if(touchState <= TouchState.touch2){
     if(e.ctrlKey){
       // Does nothing
+      e.preventDefault();
     }
     else{
-      control.scroll(e.deltaX, e.deltaY);
+      var unit = 0;
+      if(e.deltaMode == 0){
+        unit = 1;
+      }
+      else if(e.deltaMode == 1){
+        unit = 20;
+      }
+      control.scroll(e.deltaX * unit, e.deltaY * unit);
     }
   }
+  console.log(e);
 }
 
 function touchStart(e){

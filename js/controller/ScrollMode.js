@@ -22,7 +22,7 @@ scrollMode.cancel = function(touch){
 
 scrollMode.scroll = function(sx, sy){
   view.stopScroll();
-  view.scroll(sx * 20, sy * 20);
+  view.scroll(sx, sy);
 };
 
 scrollMode.exit = function(touch){

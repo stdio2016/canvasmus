@@ -65,9 +65,13 @@ view.zoom = function(newZoom, centerX, centerY){
     newZoom = 0.1;
   }
   var oldZoom = viewpoint.scale;
-  var deltaZoom = 1 - oldZoom / newZoom;
-  this.scroll(deltaZoom * centerX, deltaZoom * centerY, true);
+  var deltaZoom = newZoom / oldZoom - 1;
   viewpoint.scale = newZoom;
+  this.scroll(deltaZoom * centerX, deltaZoom * centerY);
+};
+
+view.getZoom = function(){
+  return viewpoint.scale;
 };
 
 view.stopScroll = function(){
