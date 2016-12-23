@@ -183,7 +183,30 @@ function touchEnd(e){
 }
 
 function touchCancel(e){
-
+  e.preventDefault();
+  var changed = e.changedTouches;
+  switch (touchState) {
+    case TouchState.touch1:
+      control.cancel();
+      touchState = TouchState.none;
+      break;
+    case TouchState.touch2:
+      control.cancel();
+      if(e.touches.length == 0){
+        touchState = TouchState.none;
+      }
+      else{
+        touchState = TouchState.touch3More;
+      }
+      break;
+    case TouchState.touch3More:
+      if(e.touches.length == 0){
+        touchState = TouchState.none;
+      }
+      break;
+    default:
+      break;
+  }
 }
 
 canvas.addEventListener('mousedown', mouseDown);
