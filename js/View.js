@@ -8,13 +8,39 @@ function resize(){
 }
 canvas.addEventListener('resize', resize);
 
+// TODO
+var testScore = Test.makeScore();
+
 function draw(){
+  changed = false;
+  moveViewpoint();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.save();
   ctx.scale(viewpoint.scale, viewpoint.scale);
   ctx.translate(-viewpoint.x, -viewpoint.y);
-  drawTest();
+  testScore.drawOn(ctx);
   ctx.restore();
+}
+
+function moveViewpoint(){
+  if(viewpoint.moving){
+    var vx=viewpoint.vx,vy=viewpoint.vy;
+    if(vx*vx+vy*vy<=0.5){
+      viewpoint.moving=false;
+    }
+    else{
+      viewpoint.x+=vx;
+      viewpoint.y+=vy;
+      var magn=Math.sqrt(vx*vx+vy*vy);
+      viewpoint.vx-=vx/magn*0.4;
+      viewpoint.vy-=vy/magn*0.4;
+      makeChange();
+    }
+  }
+  if(viewpoint.x>2700-canvas.width) viewpoint.x=2700-canvas.width;
+  if(viewpoint.x<0) viewpoint.x=0;
+  if(viewpoint.y>canvas.height-50) viewpoint.y=canvas.height-50;
+  if(viewpoint.y<0) viewpoint.y=0;
 }
 
 function drawTest(){
@@ -82,4 +108,5 @@ view.continueScroll = function(vx, vy){
   viewpoint.moving = true;
   viewpoint.vx = vx;
   viewpoint.vy = vy;
+  makeChange();
 };
