@@ -7,11 +7,13 @@ Score.fromJSON = function (json) {
   var score = new Score();
   var parts = json.parts;
   for (var i = 0; i < parts.length; i++) {
-
+    score.addPart(Part.fromJSON(parts[i]));
   }
+  return score;
 };
 
 Score.prototype.addPart = function (part) {
+  part.score = this;
   this.parts.push(part);
 };
 
